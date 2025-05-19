@@ -1,0 +1,38 @@
+/* Reset rápido */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, sans-serif;
+  background: #f5f5f5;
+  color: #1a202c;
+  line-height: 1.6;
+}
+
+/* Layout */
+.container {
+  max-width: 48rem;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgb(0 0 0 / 0.05);
+}
+
+/* Tipografía */
+h1 { font-size: 2.4rem; margin-bottom: 0.5rem; }
+h2 { font-size: 1.8rem; margin: 2rem 0 0.75rem; }
+h3 { font-size: 1.25rem; margin: 1.5rem 0 0.5rem; }
+.name   { color: #2563eb; }   /* azul ligero */
+.tagline{ color: #64748b; font-size: 1rem; }
+
+/* Listas */
+ul { margin-left: 1.25rem; }
+li { margin-bottom: 0.5rem; }
+
+/* Footer */
+footer {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-top: 3rem;
+}
