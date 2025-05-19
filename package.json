@@ -5,7 +5,7 @@
   "type": "module",
 
   
-  "homepage": "https://github.com/mrbugs16/github-profile",
+  "homepage": "https://mrbugs16.github.io/github-profile",
 
   "scripts": {
     "dev": "vite",
