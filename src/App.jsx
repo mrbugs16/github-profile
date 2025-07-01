@@ -1,12 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './index.css';
 
 export default function App() {
   const year = new Date().getFullYear();
-  const [darkMode, setDarkMode] = useState(false);
+  const [theme, setTheme] = useState('light');
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [imageError, setImageError] = useState(false);
   const [showModal, setShowModal] = useState(false);
+
+  // Animaciones Scroll
+  const sectionsRef = useRef([]);
 
   // Detectar preferencia del sistema y cargar tema guardado
   useEffect(() => {
@@ -14,8 +17,17 @@ export default function App() {
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
     if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-      setDarkMode(true);
+      setTheme('dark');
       document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('glass');
+    } else if (savedTheme === 'glass') {
+      setTheme('glass');
+      document.documentElement.classList.add('glass');
+      document.documentElement.classList.remove('dark');
+    } else {
+      setTheme('light');
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.remove('glass');
     }
   }, []);
 
@@ -30,6 +42,52 @@ export default function App() {
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // Animaciones de scroll
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.2,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+        }
+      });
+    }, observerOptions);
+
+    // Observador específico para timeline events
+    const timelineObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+        }
+      });
+    }, {
+      threshold: 0.3,
+      rootMargin: '0px 0px -100px 0px'
+    });
+
+    // Observar todas las secciones
+    sectionsRef.current.forEach((section) => {
+      if (section) observer.observe(section);
+    });
+
+    // Observar timeline events después de un pequeño delay
+    setTimeout(() => {
+      const timelineEvents = document.querySelectorAll('.timeline-event');
+      timelineEvents.forEach((event) => {
+        if (event) timelineObserver.observe(event);
+      });
+    }, 100);
+
+    return () => {
+      observer.disconnect();
+      timelineObserver.disconnect();
+    };
   }, []);
 
   // Cerrar modal con ESC
@@ -53,15 +111,34 @@ export default function App() {
     };
   }, [showModal]);
 
-  // Alternar modo oscuro
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    if (!darkMode) {
+  // Alternar modo de tema (light/dark/glass)
+  const toggleTheme = () => {
+    let nextTheme;
+    if (theme === 'light') {
+      nextTheme = 'dark';
+    } else if (theme === 'dark') {
+      nextTheme = 'glass';
+    } else {
+      nextTheme = 'light';
+    }
+    setTheme(nextTheme);
+    localStorage.setItem('theme', nextTheme);
+    if (nextTheme === 'dark') {
       document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
+      document.documentElement.classList.remove('glass');
+    } else if (nextTheme === 'glass') {
+      document.documentElement.classList.add('glass');
+      document.documentElement.classList.remove('dark');
     } else {
       document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
+      document.documentElement.classList.remove('glass');
+    }
+  };
+
+  // Función para agregar referencias a las secciones
+  const addToRefs = (el) => {
+    if (el && !sectionsRef.current.includes(el)) {
+      sectionsRef.current.push(el);
     }
   };
 
@@ -87,11 +164,11 @@ export default function App() {
                 <div className="profile-photo">
                   {!imageError ? (
                     <img 
-                      src="bat.jpg" 
+                      src="/NOMBRE-DE-TU-FOTO.jpg" 
                       alt="Santiago - Perfil Profesional" 
                       className="profile-image"
                       onError={() => {
-                        console.log('Error cargando imagen desde bat.jpg');
+                        console.log('Error cargando imagen desde /NOMBRE-DE-TU-FOTO.jpg');
                         setImageError(true);
                       }}
                       onLoad={() => console.log('Imagen cargada exitosamente')}
@@ -104,40 +181,42 @@ export default function App() {
               </div>
             </div>
             <div className="profile-info">
-              <h1>Mi Perfil – <span className="name">Santiago</span></h1>
-              <p className="tagline">Ingeniero en Computación | Desarrollador Frontend | Innovador Tecnológico</p>
+              <h1> My profile – <span className="name">Santiago</span></h1>
+              <p className="tagline"> Engineering in Computer and Telecommunications Technology | Backend Developer | Fronted Developer </p>
             </div>
           </div>
           <button 
-            onClick={toggleDarkMode}
+            onClick={toggleTheme}
             className="theme-toggle"
-            aria-label="Alternar modo oscuro"
+            aria-label="Alternar modo de tema"
           >
-            {darkMode ? '☀️' : '🌙'}
+            {theme === 'dark' ? '☀️' : theme === 'glass' ? '🧊' : '🌙'}
           </button>
         </div>
         
         <div className="contact-links">
-          <a href="mailto:tu-email@ejemplo.com" className="contact-link">📧 Email</a>
-          <a href="https://linkedin.com/in/tu-perfil" className="contact-link">💼 LinkedIn</a>
+          <a href="mailto:st16contact@gmail.com" className="contact-link">📧 Email</a>
+          <a href="https://www.linkedin.com/in/santiago-tapia-8362ba2a6/" className="contact-link">💼 LinkedIn</a>
           <a href="https://github.com/mrbugs16" className="contact-link">🐙 GitHub</a>
         </div>
       </header>
 
       {/* ——— Sobre mí ——— */}
       <section id="sobre-mi">
-        <h2>🧑‍💻 Sobre mí</h2>
+        <h2>🧑‍💻 About me </h2>
         <p>
-          Soy un <strong>ingeniero en computación</strong> apasionado por el desarrollo web,
-          la innovación tecnológica y el aprendizaje continuo. Me especializo en frontend
-          con React y en el diseño de interfaces accesibles. Disfruto resolviendo problemas
-          complejos y creando soluciones que impacten positivamente en la experiencia del usuario.
+           I am a Computer Engineering graduate with a deep passion for technology, innovation, and continuous learning.
+          I bring a strong work ethic and a resilient mindset, shaped by my background as a natural bodybuilder.
+          From a young age, sports taught me that every challenge is worth facing, and every loss is a valuable lesson.
+          I began my career focusing on backend services within the banking sector.
+          However, my curiosity and drive to grow led me to develop frontend skills as well.
+          This culminated in contributing to web services during my social service, where I supported a refugee assistance organization.
         </p>
       </section>
 
       {/* ——— Habilidades técnicas ——— */}
       <section id="habilidades">
-        <h2>🛠️ Habilidades Técnicas</h2>
+        <h2>🛠️ Technical Skills </h2>
         
         <div className="skills-grid">
           <div className="skill-category">
@@ -278,6 +357,43 @@ export default function App() {
         </div>
       </section>
 
+      {/* ——— Playlist de Spotify ——— */}
+      <section id="spotify" className="spotify-section">
+        <h2>🎵 My Coding Playlist</h2>
+        <p>¡Disfruta de la música que me acompaña mientras programo!</p>
+        <div className="spotify-embed-container">
+          <iframe style={{borderRadius: '12px'}} src="https://open.spotify.com/embed/playlist/37i9dQZF1DX8Uebhn9wzrS?utm_source=generator" width="100%" height="152" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        </div>
+      </section>
+
+      {/* ——— Idiomas ——— */}
+      <section id="idiomas">
+        <h2>🌍 Languages</h2>
+        <div className="languages-grid">
+          <div className="language-card">
+            <div className="language-flag">🇪🇸</div>
+            <div className="language-info">
+              <h3>Spanish</h3>
+              <p className="language-level">Native</p>
+              <div className="language-progress">
+                <div className="progress-bar" style={{width: '100%'}}></div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="language-card">
+            <div className="language-flag">🇺🇸</div>
+            <div className="language-info">
+              <h3>English</h3>
+              <p className="language-level">C1 - Advanced</p>
+              <div className="language-progress">
+                <div className="progress-bar" style={{width: '85%'}}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <footer>
         <p>© {year} Santiago. Hecho con ❤️ y React.</p>
         <p className="footer-note">Desplegado en GitHub Pages</p>
@@ -293,7 +409,7 @@ export default function App() {
             <div className="modal-batman-glow"></div>
             <div className="modal-rotating-border"></div>
             <img 
-              src="bat.jpg" 
+              src="NOMBRE-DE-TU-FOTO.jpg" 
               alt="Santiago - Perfil Profesional Ampliado" 
               className="modal-image"
             />
