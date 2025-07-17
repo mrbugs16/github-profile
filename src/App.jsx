@@ -8,10 +8,10 @@ export default function App() {
   const [imageError, setImageError] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  // Animaciones Scroll
+  // Scroll animations
   const sectionsRef = useRef([]);
 
-  // Detectar preferencia del sistema y cargar tema guardado
+  // Detect system preference and load saved theme
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -31,7 +31,7 @@ export default function App() {
     }
   }, []);
 
-  // Seguir el movimiento del cursor
+  // Follow the cursor movement
   useEffect(() => {
     const handleMouseMove = (e) => {
       setMousePosition({
@@ -44,7 +44,7 @@ export default function App() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Animaciones de scroll
+  // Scroll animations
   useEffect(() => {
     const observerOptions = {
       threshold: 0.2,
@@ -59,7 +59,7 @@ export default function App() {
       });
     }, observerOptions);
 
-    // Observador específico para timeline events
+    // Specific observer for timeline events
     const timelineObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -71,12 +71,12 @@ export default function App() {
       rootMargin: '0px 0px -100px 0px'
     });
 
-    // Observar todas las secciones
+    // Observe all sections
     sectionsRef.current.forEach((section) => {
       if (section) observer.observe(section);
     });
 
-    // Observar timeline events después de un pequeño delay
+    // Observe timeline events after a small delay
     setTimeout(() => {
       const timelineEvents = document.querySelectorAll('.timeline-event');
       timelineEvents.forEach((event) => {
@@ -90,7 +90,7 @@ export default function App() {
     };
   }, []);
 
-  // Cerrar modal con ESC
+  // Close modal with ESC
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
@@ -111,7 +111,7 @@ export default function App() {
     };
   }, [showModal]);
 
-  // Alternar modo de tema (light/dark/glass)
+  // Toggle theme (light/dark/glass)
   const toggleTheme = () => {
     let nextTheme;
     if (theme === 'light') {
@@ -135,7 +135,7 @@ export default function App() {
     }
   };
 
-  // Función para agregar referencias a las secciones
+  // Function to add references to the sections
   const addToRefs = (el) => {
     if (el && !sectionsRef.current.includes(el)) {
       sectionsRef.current.push(el);
@@ -144,7 +144,7 @@ export default function App() {
 
   return (
     <>
-      {/* Efecto de lupa que sigue el cursor */}
+      {/* Cursor effect */}
       <div 
         className="cursor-spotlight"
         style={{
@@ -164,7 +164,7 @@ export default function App() {
                 <div className="profile-photo">
                   {!imageError ? (
                     <img 
-                      src="/NOMBRE-DE-TU-FOTO.jpg" 
+                      src="profiletwo.png" 
                       alt="Santiago - Perfil Profesional" 
                       className="profile-image"
                       onError={() => {
@@ -201,7 +201,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* ——— Sobre mí ——— */}
+      {/* ——— About me ——— */}
       <section id="sobre-mi">
         <h2>🧑‍💻 About me </h2>
         <p>
@@ -214,7 +214,7 @@ export default function App() {
         </p>
       </section>
 
-      {/* ——— Habilidades técnicas ——— */}
+      {/* ——— Technical skills ——— */}
       <section id="habilidades">
         <h2>🛠️ Technical Skills </h2>
         
@@ -231,7 +231,28 @@ export default function App() {
           </div>
           
           <div className="skill-category">
-            <h3>Herramientas</h3>
+            <h3>BackEnd</h3>
+            <div className="skills-tags">
+              <span className="skill-tag">MySQL</span>
+              <span className="skill-tag">SAS Viya</span>
+              <span className="skill-tag">Laravel</span>
+              </div>
+          </div>
+
+          <div className="skill-category">
+            <h3>Languages</h3>
+            <div className="skills-tags">
+              <span className="skill-tag">C</span>
+              <span className="skill-tag">Java</span>
+              <span className="skill-tag">TypeScript</span>
+              <span className="skill-tag">Golang</span>
+              <span className="skill-tag">Python</span>
+              </div>
+          </div>
+
+
+          <div className="skill-category">
+            <h3>Tools</h3>
             <div className="skills-tags">
               <span className="skill-tag">Git</span>
               <span className="skill-tag">Vite</span>
@@ -241,29 +262,30 @@ export default function App() {
           </div>
           
           <div className="skill-category">
-            <h3>Otros</h3>
+            <h3>Others</h3>
             <div className="skills-tags">
-              <span className="skill-tag">Redes 5G</span>
-              <span className="skill-tag">Accesibilidad Web</span>
-              <span className="skill-tag">Responsive Design</span>
+              <span className="skill-tag">Social Media Management</span>
+              <span className="skill-tag">Web Architecture</span>
+              <span className="skill-tag">5G Service Communication</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ——— Proyectos destacados ——— */}
+
+      {/* ——— Featured projects ——— */}
       <section id="proyectos">
-        <h2>🚀 Proyectos Destacados</h2>
+        <h2>🚀 Featured Projects</h2>
         
         <div className="projects-grid">
           <div className="project-card">
-            <h3>Aplicación Web de Gestión</h3>
-            <p>Sistema de gestión desarrollado con React y Node.js durante mi experiencia en ABC Tech.</p>
+            <h3>Electoral Preferences in the Mexican Presidental Debates</h3>
+            <p>+ Developed a sentiment analysis algorithm to evaluate public opinion via X (formerly Twitter) during three presidential debates.
+              + Analyzed 10,000+ tweets using natural language processing and data analysis techniques using Python. </p>
             <div className="project-tech">
-              <span className="tech-tag">React</span>
-              <span className="tech-tag">Node.js</span>
-              <span className="tech-tag">MongoDB</span>
-            </div>
+              <span className="tech-tag">Python</span>
+              <span className="tech-tag">X</span>
+              </div>
             <div className="project-links">
               <a href="#" className="project-link">Ver Demo</a>
               <a href="#" className="project-link">Código</a>
@@ -271,12 +293,12 @@ export default function App() {
           </div>
           
           <div className="project-card">
-            <h3>Hackathon Winner Project</h3>
-            <p>Proyecto ganador del 1er lugar en Hackathon U XYZ 2024, enfocado en soluciones de IoT.</p>
+            <h3> Online Food Ordering Platform for Ibero</h3>
+            <p> + Created a website enabling students and staff to order meals online from campus restaurants.</p>
+               <p>+ Designed to reduce wait times and improve food service efficiency.</p>
             <div className="project-tech">
-              <span className="tech-tag">IoT</span>
-              <span className="tech-tag">React</span>
-              <span className="tech-tag">API REST</span>
+              <span className="tech-tag">Python</span>
+              <span className="tech-tag">Django</span>
             </div>
             <div className="project-links">
               <a href="#" className="project-link">Ver Demo</a>
@@ -286,44 +308,58 @@ export default function App() {
         </div>
       </section>
 
-      {/* ——— Formación académica ——— */}
+      {/* ——— Academic formation ——— */}
       <section id="formacion">
-        <h2>🎓 Formación Académica</h2>
+        <h2>🎓 Education </h2>
         <div className="timeline-item">
-          <h3>B.Sc. Ingeniería en Computación</h3>
-          <p className="institution">Universidad XYZ | 2021-2025</p>
-          <p>Especialización en desarrollo de software y redes de comunicación.</p>
+
+          <h3>B.S. in Computer Systems and Telecommunications Engineering</h3>
+          <p className="institution"> Universidad Iberoamericana, A.C | August 2021 - December 2025</p>
+          <p>Former Varsity Tennis & Basketball Player at Universidad Iberoamericana</p>
         </div>
         
         <div className="timeline-item">
-          <h3>Diplomado en Redes 5G</h3>
-          <p className="institution">IEEE ComSoc | 2024</p>
-          <p>Certificación especializada en tecnologías de quinta generación.</p>
+          <h3>HighSchool</h3>
+          <p className="institution">Colegio México Bachillerato A.C | August 2016 - June 2019</p>
+          <p>Former Varsity Volleyball Player at CMB. </p>
         </div>
       </section>
 
-      {/* ——— Experiencia y logros ——— */}
+      <div className="timeline-item">
+          <h3>TOEFL ITP Certified</h3>
+          <p className="institution">Adams College of English | August 2019 - December 2019</p>
+          <p>Completed a 6-month intensive English program in the U.S.</p>
+        </div>
+      
+
+      {/* ——— Experience and achievements ——— */}
       <section id="experiencia">
         <h2>💼 Experiencia y Logros</h2>
 
         <div className="experience-section">
-          <h3>Experiencia Profesional</h3>
+          <h3>Professional Experience</h3>
           
           <div className="timeline-item">
-            <h4>Desarrollador Frontend — ABC Tech</h4>
-            <p className="period">Junio 2024 – Presente</p>
-            <p>Desarrollo de interfaces web responsivas y accesibles usando React. Colaboración en equipos ágiles y optimización de performance.</p>
+            <h4>Full Stack Developer - Intrare</h4>
+            <p className="period">2025 January – 2025 July </p>
+            <p> + Optimized the company’s web platform by improving accessibility and modernizing the user interface..</p>
+            <p> + Contributed to the expansion and scalability of the user network.</p>
+            <p> + Collaborated in full stack development tasks, ensuring responsive design and efficient backend integration.</p>
           </div>
           
           <div className="timeline-item">
-            <h4>Practicante de I+D — Laboratorio de Telecom</h4>
-            <p className="period">Enero - Mayo 2024</p>
-            <p>Investigación en tecnologías 5G y desarrollo de prototipos para comunicaciones móviles.</p>
+            <h4>Back-End - Kapital Bank </h4>
+            <p className="period">2024 August - Present </p>
+            <p> + Participated in the development of a new banking system using Golang, following hexagonal architecture and implementing micro-kernel patterns for modularity and maintainability.</p>
+            <p> + Performed critical database adjustments to enhance performance and ensure consistency across services.</p>
+            <p> + Integrated Firebase services to manage user authentication through token-based access, connecting with PHP for backend operations.</p>
+            <p> + Supported the development of new JavaScript functions to enhance interactivity and frontend behavior.</p>
+            <p> + Collaborated with cross-functional teams to ensure secure and scalable delivery of banking features.</p>
           </div>
         </div>
 
         <div className="experience-section">
-          <h3>Logros Académicos</h3>
+          <h3>Academic Achievements</h3>
           <div className="achievements">
             <div className="achievement">
               <span className="achievement-icon">🏆</span>
@@ -344,29 +380,17 @@ export default function App() {
         </div>
       </section>
 
-      {/* ——— Call to action ——— */}
-      <section id="contacto" className="cta-section">
-        <h2>📬 ¡Conectemos!</h2>
-        <p>
-          Estoy siempre abierto a nuevas oportunidades, colaboraciones y conversaciones interesantes. 
-          No dudes en contactarme si tienes un proyecto emocionante o simplemente quieres charlar sobre tecnología.
-        </p>
-        <div className="cta-buttons">
-          <a href="mailto:tu-email@ejemplo.com" className="cta-button primary">Enviar Email</a>
-          <a href="https://linkedin.com/in/tu-perfil" className="cta-button secondary">Ver LinkedIn</a>
-        </div>
-      </section>
 
-      {/* ——— Playlist de Spotify ——— */}
+      {/* ——— Spotify playlist ——— */}
       <section id="spotify" className="spotify-section">
         <h2>🎵 My Coding Playlist</h2>
-        <p>¡Disfruta de la música que me acompaña mientras programo!</p>
+        <p> Enjoy the music that accompanies me while I code!</p>
         <div className="spotify-embed-container">
-          <iframe style={{borderRadius: '12px'}} src="https://open.spotify.com/embed/playlist/37i9dQZF1DX8Uebhn9wzrS?utm_source=generator" width="100%" height="152" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+          <iframe style={{borderRadius: '11px'}} src="https://open.spotify.com/playlist/37i9dQZF1DX0XUsuxWHRQd?si=4qaZlR4mT86-_4pqbGs_Dg" width="100%" height="152" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
         </div>
       </section>
 
-      {/* ——— Idiomas ——— */}
+      {/* ——— Languages ——— */}
       <section id="idiomas">
         <h2>🌍 Languages</h2>
         <div className="languages-grid">
@@ -387,7 +411,7 @@ export default function App() {
               <h3>English</h3>
               <p className="language-level">C1 - Advanced</p>
               <div className="language-progress">
-                <div className="progress-bar" style={{width: '85%'}}></div>
+                <div className="progress-bar" style={{width: '70%'}}></div>
               </div>
             </div>
           </div>
@@ -395,12 +419,12 @@ export default function App() {
       </section>
 
       <footer>
-        <p>© {year} Santiago. Hecho con ❤️ y React.</p>
-        <p className="footer-note">Desplegado en GitHub Pages</p>
+        <p>© {year} Santiago. Made with ❤️ and React.</p>
+        <p className="footer-note">Deployed on GitHub Pages</p>
       </footer>
     </main>
 
-    {/* Modal de foto ampliada estilo Batman */}
+    {/* Expanded photo modal */}
     {showModal && (
       <div className="photo-modal" onClick={() => setShowModal(false)}>
         <div className="modal-backdrop"></div>
@@ -409,7 +433,7 @@ export default function App() {
             <div className="modal-batman-glow"></div>
             <div className="modal-rotating-border"></div>
             <img 
-              src="NOMBRE-DE-TU-FOTO.jpg" 
+              src="profiletwo.png" 
               alt="Santiago - Perfil Profesional Ampliado" 
               className="modal-image"
             />
@@ -423,8 +447,8 @@ export default function App() {
           </div>
           <div className="modal-info">
             <h3>Santiago</h3>
-            <p>Ingeniero en Computación</p>
-            <p className="modal-hint">Presiona ESC o haz click fuera para cerrar</p>
+            <p>Computer Systems and Telecommunications Engineering</p>
+            <p className="modal-hint">Click outside or press ESC to close</p>
           </div>
         </div>
       </div>
