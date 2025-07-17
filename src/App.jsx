@@ -411,7 +411,7 @@ export default function App() {
               <h3>English</h3>
               <p className="language-level">C1 - Advanced</p>
               <div className="language-progress">
-                <div className="progress-bar" style={{width: '70%'}}></div>
+                <div className="progress-bar" style={{width: '75%'}}></div>
               </div>
             </div>
           </div>
